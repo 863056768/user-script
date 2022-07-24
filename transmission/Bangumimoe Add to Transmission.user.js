@@ -43,14 +43,15 @@ function addStyle() {
     ele.textContent = `
     .top-div {
         display: flex;
-        align-items: flex-start;
         flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
     }
     
     .transmission-btn {
         display: flex;
         flex-direction: column;
-        justify-content: flex-end;
+        flex: 1 1 auto;
     `;
     document.head.append(ele);
 }
