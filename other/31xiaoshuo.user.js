@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         31xiaoshuo
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.1.0
 // @description  try to take over the world!
 // @author       Hueizhi
 // @match        *://*.31xiaoshuo.com/*/*

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Marxists EN
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.1.0
 // @description  try to take over the world!
 // @author       Hueizhi
 // @match        *://www.marxists.org/*

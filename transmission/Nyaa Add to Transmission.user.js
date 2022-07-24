@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Nyaa Add to Transmission
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.1.0
 // @description  try to take over the world!
 // @author       Hueizhi
 // @match        http*://nyaa.si/*
