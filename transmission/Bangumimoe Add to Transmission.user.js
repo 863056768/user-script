@@ -5,6 +5,8 @@
 // @description  try to take over the world!
 // @author       Hueizhi
 // @match        https://bangumi.moe/*
+// @exclude      https://bangumi.moe/bangumi/list
+// @exclude      https://bangumi.moe/rss/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=bangumi.moe
 // @require      https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js
 // @connect      orangepizero2
@@ -47,7 +49,7 @@ function addStyle() {
         justify-content: center;
         flex-wrap: wrap;
     }
-    
+
     .transmission-btn {
         display: flex;
         flex-direction: column;
