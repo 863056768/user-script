@@ -136,18 +136,20 @@ function addStyle() {
     .transmission-td {
         display: flex;
         flex-direction: row;
-        justify-content: center;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
     }
 
-    .transmission-btn {
-        display: flex;
-        flex-direction: column;
-        flex: 1 1 auto;
-    
+    .transmission-td > button + button {
+        margin-left: 4px;
+    }
+
     .btn-warning {
       background-color: #eec445;
       border-color: #eec445;
+    }
+    
+    .container {
+      max-width: 100vw;
     }`;
   document.head.append(ele);
 }
