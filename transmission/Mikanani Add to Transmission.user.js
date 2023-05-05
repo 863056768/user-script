@@ -1,10 +1,16 @@
 // ==UserScript==
 // @name         Mikanani.me Add to Transmission
 // @namespace    http://tampermonkey.net/
-// @version      0.1.1
+// @version      0.1.2
 // @description  try to take over the world!
 // @author       Hueizhi
 // @match        https://mikanani.me/*
+// @exclude      https://mikanani.me
+// @exclude      https://mikanani.me/Account/*
+// @exclude      https://mikanani.me/Home/PublishGroup/*
+// @exclude      https://mikanani.me/RSS/*
+// @exclude      https://mikanani.me/Home/Contact
+// @exclude      https://mikanani.me/Home/Publish
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=mikanani.me
 // @updateURL    https://github.com/863056768/user-script/raw/main/transmission/Mikanani%20Add%20to%20Transmission.user.js
 // @connect      orangepizero2
@@ -12,6 +18,22 @@
 // @connect      127.0.0.1
 // @grant        GM_xmlhttpRequest
 // ==/UserScript==
+
+const downloadDir = "/downloads/mikanani.me/";
+const rpcBind = "http://orangepizero2:9091/transmission/rpc";
+const isEpisode = location.href.startsWith("https://mikanani.me/Home/Episode");
+
+function installButton() {
+  addStyle();
+  addStyle();
+  if (isEpisode) {
+    console.log("install button on episode");
+    installButtonOnEpisode();
+  } else {
+    console.log("install button on table");
+    installButtonOnTable();
+  }
+}
 
 /**
  * @typedef {Object} Torrent
@@ -126,8 +148,6 @@ class TransmissionClient {
   }
 }
 
-const downloadDir = "/downloads/mikanani.me/";
-const rpcBind = "http://orangepizero2:9091/transmission/rpc";
 const client = new TransmissionClient();
 
 function addStyle() {
@@ -147,7 +167,7 @@ function addStyle() {
       background-color: #eec445;
       border-color: #eec445;
     }
-    
+
     .container {
       max-width: 100vw;
     }`;
@@ -237,6 +257,33 @@ function installButtonOnTable() {
   });
 }
 
+function installButtonOnEpisode() {
+  const nav = document.querySelector("div.leftbar-nav");
+  const torrent = nav.children[0].href;
+  const magnet = nav.children[1].href;
+  const torrentBtn = document.createElement("button");
+  const magnetBtn = document.createElement("button");
+  torrentBtn.className = "btn episode-btn btn-episode-btn";
+  magnetBtn.className = "btn episode-btn btn-episode-btn";
+  torrentBtn.innerHTML = '<i class="fa fa-file"></i><span> 发送种子</span>';
+  magnetBtn.innerHTML = '<i class="fa fa-magnet"></i><span> 发送磁链</span>';
+
+  nav.prepend(torrentBtn, magnetBtn);
+
+  torrentBtn.addEventListener(
+    "click",
+    newBtnEventHandler("btn-episode-btn", "fa-file", (btn) =>
+      torrentAddURLHandler(torrent)
+    )
+  );
+  magnetBtn.addEventListener(
+    "click",
+    newBtnEventHandler("btn-episode-btn", "fa-magnet", (btn) =>
+      torrentAddURLHandler(magnet)
+    )
+  );
+}
+
 /**
  * @async
  * @function
@@ -290,11 +337,6 @@ function today() {
     "-" +
     date.getDate().toString().padStart(2, "0")
   );
-}
-
-function installButton() {
-  addStyle();
-  installButtonOnTable();
 }
 
 installButton();
