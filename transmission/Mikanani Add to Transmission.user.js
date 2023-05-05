@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Mikanani.me Add to Transmission
 // @namespace    http://tampermonkey.net/
-// @version      0.1.2
+// @version      0.1.3
 // @description  try to take over the world!
 // @author       Hueizhi
 // @match        https://mikanani.me/*
@@ -153,24 +153,35 @@ const client = new TransmissionClient();
 function addStyle() {
   let ele = document.createElement("style");
   ele.textContent = `
-    .transmission-td {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-    }
-
-    .transmission-td > button + button {
-        margin-left: 4px;
-    }
-
-    .btn-warning {
-      background-color: #eec445;
-      border-color: #eec445;
-    }
-
-    .container {
-      max-width: 100vw;
-    }`;
+  .transmission-td {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+  
+  .transmission-td > button + button {
+    margin-left: 4px;
+  }
+  
+  .btn-warning {
+    background-color: #eec445;
+    border-color: #eec445;
+  }
+  
+  .container {
+    max-width: 100vw;
+  }
+  
+  .episode-btn {
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+  }
+  .episode-btn > i {
+    position: absolute;
+    margin-left: -80px;
+  }`;
   document.head.append(ele);
 }
 
@@ -268,7 +279,7 @@ function installButtonOnEpisode() {
   torrentBtn.innerHTML = '<i class="fa fa-file"></i><span> 发送种子</span>';
   magnetBtn.innerHTML = '<i class="fa fa-magnet"></i><span> 发送磁链</span>';
 
-  nav.prepend(torrentBtn, magnetBtn);
+  nav.append(torrentBtn, magnetBtn);
 
   torrentBtn.addEventListener(
     "click",
