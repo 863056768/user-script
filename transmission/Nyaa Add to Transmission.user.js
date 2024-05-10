@@ -1,22 +1,28 @@
 // ==UserScript==
 // @name         Nyaa Add to Transmission
 // @namespace    http://tampermonkey.net/
-// @version      0.1.0
+// @version      0.1.3
 // @description  try to take over the world!
 // @author       Hueizhi
-// @match        http*://nyaa.si/*
-// @match        http*://sukebei.nyaa.si/*
+// @match        https://nyaa.si/*
+// @match        https://sukebei.nyaa.si/*
+// @match        https://u9a9.com/*
 // @exclude      https://nyaa.si/upload*
 // @exclude      https://sukebei.nyaa.si/upload*
+// @exclude      https://u9a9.com/upload*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=nyaa.si
 // @require      https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js
 // @connect      orangepizero2
 // @connect      192.168.1.147
 // @connect      127.0.0.1
 // @grant        GM_xmlhttpRequest
+// @grant        GM_setValue
+// @grant        GM_getValue
+// @grant        GM_addStyle
 // ==/UserScript==
 
-const downloadDir = "/downloads/nyaa.si/";
+const defaultDownloadDir = "/downloads/nyaa.si/";
+let downloadDir = GM_getValue("downloadDir", defaultDownloadDir);
 const rpcBind = "http://orangepizero2:9091/transmission/rpc";
 
 const $ = window.jQuery;
@@ -27,6 +33,7 @@ setInterval(refreshSessionID, 5 * 60 * 1000);
 $(document).ready(installButton);
 function installButton() {
   addStyle();
+  installDownloadDirSetter();
   if (isView) {
     console.log("install button on view");
     installButtonOnView();
@@ -37,8 +44,7 @@ function installButton() {
 }
 
 function addStyle() {
-  let ele = document.createElement("style");
-  ele.innerHTML = `
+  GM_addStyle(`
     .torrent-add {
         background-color: transparent;
         border-color: transparent;
@@ -74,8 +80,27 @@ function addStyle() {
             transform: rotate(1080deg);
         }
     }
-    `;
-  document.head.append(ele);
+    `);
+}
+
+function installDownloadDirSetter() {
+  const navbar = document.getElementById("navbar");
+  const btn = document.createElement("a");
+  const li = document.createElement("li");
+  li.append(btn);
+  btn.innerText = "下载目录: " + downloadDir;
+  btn.style.cursor = "pointer";
+  btn.addEventListener("click", () => {
+    let newDownloadDir = prompt("请输入下载目录\n留空使用默认目录", "/HDD/BanGDream").trim();
+    if (newDownloadDir === "") {
+      newDownloadDir = defaultDownloadDir;
+    }
+    GM_setValue("downloadDir", newDownloadDir);
+    downloadDir = newDownloadDir;
+    btn.innerText = "下载目录: " + newDownloadDir;
+  });
+
+  navbar.querySelector("ul").appendChild(li);
 }
 
 function installButtonOnTable() {
@@ -206,7 +231,10 @@ function sendTorrent(metainfo) {
       arguments: {
         metainfo: metainfo,
         paused: false,
-        "download-dir": downloadDir + today(),
+        "download-dir":
+          downloadDir === defaultDownloadDir
+            ? downloadDir + today()
+            : downloadDir,
       },
       method: "torrent-add",
     };
@@ -240,7 +268,10 @@ function sendMagnet(magnet) {
       data: JSON.stringify({
         arguments: {
           filename: magnet,
-          "download-dir": downloadDir + today(),
+          "download-dir":
+            downloadDir === defaultDownloadDir
+              ? downloadDir + today()
+              : downloadDir,
         },
         method: "torrent-add",
       }),

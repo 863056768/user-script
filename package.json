@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "tampermonkey-vscode-helper": "^1.0.1",
+    "tampermonkey-vscode-helper-cli": "^1.0.4"
+  }
+}
