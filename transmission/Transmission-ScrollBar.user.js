@@ -8,7 +8,6 @@
 // @icon         https://raw.githubusercontent.com/johman10/flood-for-transmission/master/public/images/flood.svg
 // @downloadURL  https://github.com/863056768/user-script/raw/main/transmission/Transmission-ScrollBar.user.js
 // @updateURL    https://github.com/863056768/user-script/raw/main/transmission/Transmission-ScrollBar.user.js
-// @grant        none
 // @grant        GM_addStyle
 // ==/UserScript==
 
