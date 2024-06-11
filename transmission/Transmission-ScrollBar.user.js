@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Transmission-ScrollBar
 // @namespace    http://tampermonkey.net/
-// @version      0.1.1
+// @version      0.1.2
 // @description  try to take over the world!
 // @author       Hueizhi
 // @match        http://orangepizero2:9091/transmission/web/
