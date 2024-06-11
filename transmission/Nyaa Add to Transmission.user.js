@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Nyaa Add to Transmission
 // @namespace    http://tampermonkey.net/
-// @version      0.1.3
+// @version      0.1.4
 // @description  try to take over the world!
 // @author       Hueizhi
 // @match        https://nyaa.si/*
@@ -12,6 +12,8 @@
 // @exclude      https://u9a9.com/upload*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=nyaa.si
 // @require      https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js
+// @downloadURL  https://github.com/863056768/user-script/raw/main/transmission/Nyaa%20Add%20to%20Transmission.user.js
+// @updateURL    https://github.com/863056768/user-script/raw/main/transmission/Nyaa%20Add%20to%20Transmission.user.js
 // @connect      orangepizero2
 // @connect      192.168.1.147
 // @connect      127.0.0.1
@@ -19,8 +21,10 @@
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @grant        GM_addStyle
+// @grant        GM_addElement
 // ==/UserScript==
 
+GM_addElement;
 const defaultDownloadDir = "/downloads/nyaa.si/";
 let downloadDir = GM_getValue("downloadDir", defaultDownloadDir);
 const rpcBind = "http://orangepizero2:9091/transmission/rpc";
@@ -91,7 +95,10 @@ function installDownloadDirSetter() {
   btn.innerText = "下载目录: " + downloadDir;
   btn.style.cursor = "pointer";
   btn.addEventListener("click", () => {
-    let newDownloadDir = prompt("请输入下载目录\n留空使用默认目录", "/HDD/BanGDream").trim();
+    let newDownloadDir = prompt(
+      "请输入下载目录\n留空使用默认目录",
+      "/HDD/BanGDream"
+    ).trim();
     if (newDownloadDir === "") {
       newDownloadDir = defaultDownloadDir;
     }
@@ -294,15 +301,12 @@ function sendMagnet(magnet) {
 }
 
 function getHeadersMap(headers) {
-  let arr = headers.trim().split(/[\r\n]+/);
-  let headerMap = {};
-  arr.forEach(function (line) {
-    let parts = line.split(": ");
-    let header = parts.shift();
-    let value = parts.join(": ");
-    headerMap[header] = value;
-  });
-  return headerMap;
+  return Object.fromEntries(
+    headers
+      .trim()
+      .split(/[\r\n]+/)
+      .map((line) => line.split(":", 2).map((s) => s.trim()))
+  );
 }
 
 function parseMagnet(magnet, key) {
