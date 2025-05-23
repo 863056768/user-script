@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Mikanani.me Add to Transmission
 // @namespace    http://tampermonkey.net/
-// @version      0.1.5
+// @version      0.1.6
 // @description  try to take over the world!
 // @author       Hueizhi
 // @match        https://mikanani.me/*
@@ -243,7 +243,7 @@ const torrentBtnEventHandler = newBtnEventHandler(
 
 function installButtonOnTable() {
   const installButton = (table) => {
-    if (table.querySelectorAll("thead>tr>th").length >= 5) {
+    if ([...table.querySelectorAll("thead > tr > th")].some(th => th.textContent.trim() === "添加")) {
       return;
     }
     const tbody = table.querySelector("tbody");
@@ -264,7 +264,6 @@ function installButtonOnTable() {
 
       td.append(magnetBtn, torrentBtn);
       tr.prepend(td);
-
       magnetBtn.addEventListener("click", magnetBtnEventHandler);
       torrentBtn.addEventListener("click", torrentBtnEventHandler);
     });
@@ -337,7 +336,7 @@ async function torrentAddURLHandler(url) {
         return resolve(true);
       })
       .catch((err) => {
-        console.log("[FAIL]", err);
+        console.error("[FAIL]", err);
         return resolve(false);
       });
   });
