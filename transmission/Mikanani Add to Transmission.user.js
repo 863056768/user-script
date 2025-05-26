@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Mikanani.me Add to Transmission
 // @namespace    http://tampermonkey.net/
-// @version      0.1.7
+// @version      0.1.8
 // @description  try to take over the world!
 // @author       Hueizhi
 // @match        https://mikanani.me/*
@@ -235,7 +235,7 @@ const torrentBtnEventHandler = newBtnEventHandler(
   "fa-file",
   (btn) => {
     const url =
-      btn.parentNode.parentNode.querySelector("td:last-of-type a").href;
+      btn.parentNode.parentNode.querySelector("td:nth-last-of-type(2)>a").href;
     if (!url) Promise.reject("url not found");
     return torrentAddURLHandler(url);
   }
